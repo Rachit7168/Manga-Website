@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About - Draco</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    nav {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 999;
+    }
+
+    .logo {
+      color: #57c0ff;
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-shadow: 0 0 4px #57c0ff;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: #ddd;
+      text-decoration: none;
+      font-size: 1rem;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0%;
+      height: 2px;
+      background-color: #ff5e57;
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a:hover {
+      color: #ff5e57;
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .auth-button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      color: white;
+      transition: transform 0.3s ease;
+    }
+
+    .auth-button#login {
+      background-color: #ff5e57;
+    }
+
+    .auth-button#signout {
+      background-color: #57c0ff;
+    }
+
+    .auth-button:hover {
+      transform: scale(1.05);
+    }
+
+    .back-button {
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      border-radius: 10px;
+      padding: 10px 18px;
+      color: #fff;
+      font-size: 0.9rem;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .about-container {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      padding: 40px 30px;
+      border-radius: 20px;
+      margin: 100px auto;
+      max-width: 700px;
+      width: 90%;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      animation: floatIn 1.2s ease forwards;
+      transform: translateY(40px);
+      opacity: 0;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      color: #57c0ff;
+      text-shadow: 0 0 12px #57c0ff;
+      margin-bottom: 20px;
+      animation: glowText 3s ease-in-out infinite alternate;
+    }
+
+    p {
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      color: #ccc;
+      animation: fadeIn 1.6s ease forwards;
+    }
+
+    a {
+      color: #57c0ff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a:hover {
+      color: #ff5e57;
+      text-shadow: 0 0 8px #ff5e57;
+    }
+
+    .social-icons {
+      margin-top: 25px;
+      display: flex;
+      justify-content: center;
+      gap: 35px;
+      animation: fadeIn 2s ease forwards;
+    }
+
+    .social-icons a img {
+      width: 45px;
+      height: 45px;
+      transition: transform 0.4s ease, filter 0.4s ease;
+      filter: drop-shadow(0 0 4px #57c0ff);
+    }
+
+    .social-icons a:hover img {
+      transform: scale(1.2) rotate(5deg);
+      filter: drop-shadow(0 0 6px #ff5e57);
+    }
+
+    @keyframes glowText {
+      from {
+        text-shadow: 0 0 8px #57c0ff;
+      }
+      to {
+        text-shadow: 0 0 16px #57c0ff, 0 0 20px #57c0ff;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes floatIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav>
+    <div class="logo">Draco</div>
+
+    <div class="auth-buttons">
+      <button class="auth-button" id="login" onclick="location.href='{{ url_for('login') }}'">Login</button>
+      <button class="auth-button" id="signout" onclick="location.href='{{ url_for('signin') }}'">Sign Up</button>
+    </div>
+  </nav>
+
+  <!-- Back Button (AFTER nav so it's not hidden) -->
+  <button class="back-button" onclick="location.href='/'">← Back</button>
+
+  <!-- About Content -->
+  <div class="about-container">
+    <h1>About Me</h1>
+    <p>Hey, I'm <strong>Rachit Makwana</strong>, a Python developer with a love for tech, anime, and building aesthetic + functional websites.</p>
+    <p>This is <strong>Draco - Manga World</strong>, a modern space crafted for manga fans to explore, read, and manage manga in style.</p>
+    <p>Visit my portfolio 👉 <a href="https://your-portfolio-link.com" target="_blank">your-portfolio-link.com</a></p>
+
+    <div class="social-icons">
+      <a href="https://github.com/your-github" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733553.png" alt="GitHub" />
+      </a>
+      <a href="https://linkedin.com/in/your-linkedin" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" />
+      </a>
+      <a href="mailto:your-email@gmail.com" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Gmail" />
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>

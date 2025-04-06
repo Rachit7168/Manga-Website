@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ manga.title }} | Draco</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    a {
+      color: #eee;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    a:hover {
+      color: #ff5e57;
+      text-decoration: none;
+    }
+    .nav-links a {
+      position: relative;
+      padding-bottom: 3px;
+    }
+    
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 2px;
+      width: 0;
+      background: #ff5e57;
+      transition: width 0.3s ease;
+    }
+    
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+        
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 30px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    header h1 {
+      color: #57c0ff;
+      font-size: 2rem;
+      text-shadow: 0 0 10px #57c0ff;
+    }
+    
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+    }
+    .nav-links a {
+      color: #eee;
+      text-decoration: none;
+      position: relative;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+    
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      height: 2px;
+      width: 0;
+      background-color: #ff5e57;
+      transition: width 0.3s ease;
+    }
+    .nav-links {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+    }
+    
+    .nav-links a:hover {
+      color: #ff5e57;
+    }
+    
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+    
+    nav ul li {
+      font-size: 1rem;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+    
+    nav ul li a {
+      color: #eee;
+      text-decoration: none;
+      position: relative;
+      padding: 4px 0;
+    }
+    
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -3px;
+      width: 0;
+      height: 2px;
+      background: #ff5e57;
+      transition: width 0.3s ease;
+    }
+    
+    nav ul li a:hover {
+      color: #ff5e57;
+    }
+    
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+    
+    main {
+      flex: 1;
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+    
+    .manga-header {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+    
+    .manga-header img {
+      width: 250px;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    
+    .manga-meta-container {
+      width: 100%;
+      max-width: 500px;
+    }
+    
+    .toggle-meta {
+      width: 100%;
+      background-color: #57c0ff;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(87, 192, 255, 0.6);
+    }
+    
+    .toggle-meta:hover {
+      background-color: #ff5e57;
+      box-shadow: 0 0 12px rgba(255, 94, 87, 0.7);
+    }
+    
+    .manga-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 15px;
+      margin-top: 10px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 10px;
+      display: none;
+    }
+    
+    .manga-meta div {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    
+    .manga-meta .label {
+      width: 80px;
+      font-weight: bold;
+      color: #ff5e57;
+      flex-shrink: 0;
+    }
+    
+    @media (min-width: 768px) {
+      .manga-meta {
+        display: flex !important;
+      }
+    
+      .toggle-meta {
+        display: none;
+      }
+    
+      .manga-header {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 40px;
+      }
+    }
+    
+    .description {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 20px;
+      border-radius: 10px;
+      line-height: 1.6;
+    }
+    
+    .read-button {
+      align-self: center;
+      background-color: #ff5e57;
+      padding: 12px 30px;
+      font-size: 1rem;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 12px rgba(255, 94, 87, 0.5);
+    }
+    
+    .read-button:hover {
+      background-color: #57c0ff;
+      box-shadow: 0 0 12px rgba(87, 192, 255, 0.5);
+    }
+    
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9rem;
+      background-color: rgba(255, 255, 255, 0.03);
+      color: #aaa;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">Draco</div>
+    <div class="nav-links">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="/about">About</a>
+      <a href="/login">Login</a>
+      <a href="/signup">Signup</a>
+    </div>
+  </header>
+  
+
+  <!-- Main Content -->
+  <main>
+    <!-- Manga Detail Section -->
+    <div class="manga-header">
+      <img src="{{ manga.image_url }}" alt="{{ manga.title }} Cover">
+      
+      <div class="manga-meta-container">
+        <button class="toggle-meta">Manga Info ⯆</button>
+        <div class="manga-meta">
+          <div><span class="label">Author:</span><span>{{ manga.author }}</span></div>
+          <div><span class="label">Genre:</span><span>{{ manga.genre }}</span></div>
+          <div><span class="label">Status:</span><span>{{ manga.status.capitalize() }}</span></div>
+          <div><span class="label">Rating:</span><span>⭐ {{ manga.rating }} / 10</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="description">
+      <h2>About {{ manga.title }}</h2>
+      <p>{{ manga.description }}</p>
+    </div>
+
+    <!-- Read Chapter Button -->
+    <button class="read-button">Read Chapter 1</button>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    © 2025 Draco Manga World. All rights reserved.
+  </footer>
+
+  <!-- JS for toggle -->
+  <script>
+    const toggleBtn = document.querySelector(".toggle-meta");
+    const metaSection = document.querySelector(".manga-meta");
+
+    toggleBtn.addEventListener("click", () => {
+      const isVisible = metaSection.style.display === "flex";
+      metaSection.style.display = isVisible ? "none" : "flex";
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,561 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Draco - Manga World</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Arial', sans-serif;
+      }
+  
+      body {
+        background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+        color: #fff;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .nav-links a {
+        color: #eee;
+        text-decoration: none;
+        position: relative;
+        font-size: 1rem;
+        transition: color 0.3s ease;
+      }
+      
+      .nav-links a::after {
+        content: '';
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        height: 2px;
+        width: 0;
+        background-color: #ff5e57;
+        transition: width 0.3s ease;
+      }
+      .nav-links {
+        display: flex;
+        gap: 25px;
+        align-items: center;
+      }
+      
+      .nav-links a:hover {
+        color: #ff5e57;
+      }
+      
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+  
+      header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 30px;
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        position: relative;
+        z-index: 1000;
+      }
+  
+      header h1 {
+        font-size: 1.8rem;
+        color: #ff5e57;
+        text-shadow: 0 0 10px #ff5e57;
+      }
+  
+      nav {
+        display: flex;
+        gap: 20px;
+      }
+  
+      nav ul {
+        list-style: none;
+        display: flex;
+        gap: 20px;
+      }
+  
+      nav ul li a {
+        text-decoration: none;
+        color: inherit;
+        font-size: 1rem;
+        transition: color 0.3s ease;
+      }
+  
+      nav ul li a:hover {
+        color: #57c0ff;
+      }
+  
+      .auth-buttons {
+        display: flex;
+        gap: 10px;
+      }
+  
+      .auth-button {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        cursor: pointer;
+        color: white;
+        transition: transform 0.3s ease;
+      }
+  
+      .auth-button#login {
+        background-color: #ff5e57;
+      }
+  
+      .auth-button#signout {
+        background-color: #57c0ff;
+      }
+  
+      .auth-button:hover {
+        transform: scale(1.05);
+      }
+  
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+      }
+  
+      .hamburger span {
+        height: 3px;
+        width: 25px;
+        background: white;
+        margin: 4px;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+      }
+  
+      .mobile-menu {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        padding: 20px 0;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 999;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s ease;
+      }
+  
+      .mobile-menu.active {
+        display: flex;
+        opacity: 1;
+        pointer-events: all;
+      }
+  
+      .mobile-menu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        text-align: center;
+      }
+  
+      .mobile-menu ul li a {
+        text-decoration: none;
+        color: inherit;
+        font-size: 1.1rem;
+        padding: 12px 0;
+        display: block;
+        width: 100%;
+      }
+  
+      .mobile-menu ul li:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+  
+      .mobile-menu .auth-buttons {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+      }
+  
+      .mobile-menu .auth-button {
+        width: 80%;
+      }
+  
+      @media (max-width: 768px) {
+        nav,
+        .auth-buttons {
+          display: none;
+        }
+  
+        .hamburger {
+          display: flex;
+        }
+      }
+  
+      .intro-section {
+        text-align: center;
+        padding: 80px 20px 40px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        margin: 20px auto;
+        width: 90%;
+        max-width: 900px;
+        animation: fadeIn 2s ease-in-out;
+      }
+  
+      .intro-section h2 {
+        font-size: 2.5rem;
+        color: #57c0ff;
+        text-shadow: 0 0 10px #57c0ff;
+        margin-bottom: 15px;
+      }
+  
+      .intro-section p {
+        font-size: 1.1rem;
+        color: #aaa;
+      }
+  
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+  
+      .search-bar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 20px;
+      }
+  
+      .search-bar input {
+        padding: 10px 20px;
+        width: 250px;
+        border: 1px solid #57c0ff;
+        border-radius: 25px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        outline: none;
+        transition: all 0.3s ease;
+      }
+  
+      .search-bar input:focus {
+        border-color: #ff5e57;
+      }
+  
+      .search-bar button {
+        padding: 10px 20px;
+        border: none;
+        background-color: #57c0ff;
+        color: white;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+  
+      .search-bar button:hover {
+        background-color: #ff5e57;
+      }
+  
+      .manga-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+      }
+  
+      .manga-card {
+        width: 175px;
+        border-radius: 10px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin: 0 auto;
+      }
+  
+      .manga-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      }
+  
+      .image-container {
+        position: relative;
+        width: 175px;
+        height: 238px;
+        overflow: hidden;
+        border-radius: 10px;
+      }
+  
+      .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+  
+      .description {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(10px);
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        padding: 15px;
+        text-align: center;
+        color: white;
+        transition: opacity 0.3s ease;
+        font-size: 0.9rem;
+        border-radius: 10px;
+      }
+  
+      .image-container:hover .description {
+        opacity: 1;
+      }
+      .contact-section {
+        text-align: center;
+        margin-top: 50px;
+      }
+      
+      .contact-section h2 {
+        font-size: 2rem;
+        background: linear-gradient(135deg, #57c0ff, #a47cf3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      
+      .social-icons {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+      }
+      
+      .social-icons img {
+        width: 40px;
+        height: 40px;
+        transition: transform 0.2s ease;
+      }
+      
+      .social-icons img:hover {
+        transform: scale(1.15);
+      }
+      
+  
+      .manga-card h3 {
+        font-size: 1rem;
+        color: #57c0ff;
+        margin: 8px 0;
+        padding: 0 5px;
+      }
+  
+      .delete-button {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        background-color: #ff5e57;
+        border: none;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 8px;
+        transition: background 0.3s ease;
+      }
+  
+      .delete-button:hover {
+        background-color: #ff3b30;
+      }
+  
+      .edit-button {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        background-color: #57c0ff;
+        border: none;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 8px;
+        margin-left: 6px;
+        transition: background 0.3s ease;
+      }
+  
+      .edit-button:hover {
+        background-color: #399bd6;
+      }
+  
+      .contact-section {
+        text-align: center;
+        margin: 40px auto;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 30px;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 800px;
+      }
+  
+      .contact-section h2 {
+        font-size: 2rem;
+        color: #ff5e57;
+        margin-bottom: 10px;
+      }
+  
+      .contact-section p {
+        font-size: 1rem;
+      }
+  
+      .social-icons {
+        margin-top: 15px;
+      }
+  
+      .social-icons img {
+        width: 40px;
+        height: 40px;
+        margin: 0 10px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+  
+      .social-icons img:hover {
+        transform: scale(1.2);
+      }
+  
+      footer {
+        width: 100%;
+        padding: 20px;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        color: #aaa;
+      }
+    </style>
+  </head>
+  <body>
+
+    <header>
+      <h1>Draco</h1>
+
+      <div class="hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <nav>
+        <div class="nav-links">
+          <a href="{{ url_for('home') }}">Home</a>
+          <a href="{{ url_for('about') }}">About</a>
+          <a href="{{ url_for('category') }}">Categories</a>
+          <a href="{{ url_for('add_manga') }}">Add Manga</a>
+        </div>
+      </nav>
+
+      <div class="auth-buttons">
+        <button class="auth-button" id="login" onclick="location.href='{{ url_for('login') }}'">Login</button>
+        <button class="auth-button" id="signout" onclick="location.href='{{ url_for('signin') }}'">Sign Up</button>
+      </div>
+
+      <div class="mobile-menu" id="mobileMenu">
+        <ul>
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="{{ url_for('category') }}">Categories</a></li>
+        </ul>
+        <div class="auth-buttons">
+          <button class="auth-button" id="login" onclick="location.href='{{ url_for('login') }}'">Login</button>
+          <button class="auth-button" id="signout" onclick="location.href='{{ url_for('signin') }}'">Sign Up</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="intro-section">
+      <h2>Welcome to Draco</h2>
+      <p>Discover a world of cool mangas and share with your friends!</p>
+    </section>
+
+    <div class="search-bar">
+      <input type="text" placeholder="Search Manga...">
+      <button>Search</button>
+    </div>
+
+    <div class="manga-grid">
+      {% for manga in mangas %}
+        <div class="manga-card">
+          <a href="{{ url_for('view_manga', manga_id=manga.id) }}" style="text-decoration: none; color: inherit; position: absolute; inset: 0; z-index: 1;"></a>
+          <div class="image-container">
+            <img src="{{ manga.image_url }}" alt="{{ manga.title }}">
+            <div class="description">
+              {{ manga.description }}
+            </div>
+          </div>
+          <h3>{{ manga.title }}</h3>
+          <div style="display: flex; justify-content: center; z-index: 2; position: relative;">
+            <form action="{{ url_for('edit_manga', manga_id=manga.id) }}" method="GET">
+              <button type="submit" class="edit-button">Edit</button>
+            </form>
+            <form action="{{ url_for('delete_manga', manga_id=manga.id) }}" method="POST" style="margin-left: 8px;">
+              <button type="submit" class="delete-button">Delete</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    
+    
+    <section class="contact-section">
+      <h2>Contact Me</h2>
+      <p>I'd love to hear from you! Follow me on social media or reach out via email.</p>
+      <div class="social-icons">
+        <!-- Instagram -->
+        <a href="https://www.instagram.com" target="_blank">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" width="40" height="40">
+        </a>
+    
+        <!-- Gmail -->
+        <a href="mailto:yourmail@gmail.com">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Gmail_Icon.png" alt="Gmail" width="40" height="40">
+        </a>
+      </div>
+    </section>
+    
+
+    <footer>
+      <p>© 2024 Draco Manga Sharing Website. All rights reserved.</p>
+    </footer>
+
+    <script>
+      function toggleMenu() {
+        const menu = document.getElementById("mobileMenu");
+        menu.classList.toggle("active");
+      }
+    </script>
+
+  </body>
+  </html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Manga - Draco</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .edit-container {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 30px 25px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      animation: fadeIn 1s ease;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #57c0ff;
+      text-shadow: 0 0 10px #57c0ff;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 1rem;
+      margin-bottom: 5px;
+      display: block;
+      color: #ddd;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 12px;
+      border: 1px solid #57c0ff;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      margin-bottom: 20px;
+      outline: none;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      border-color: #ff5e57;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 25px;
+      background-color: #57c0ff;
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #ff5e57;
+      transform: scale(1.05);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="edit-container">
+    <h1>Edit Manga</h1>
+    <form method="POST">
+      <label for="title">Title</label>
+      <input type="text" name="title" id="title" value="{{ manga.title }}" required>
+    
+      <label for="author">Author</label>
+      <input type="text" name="author" id="author" value="{{ manga.author }}" required>
+    
+      <label for="description">Description</label>
+      <textarea name="description" id="description" required>{{ manga.description }}</textarea>
+    
+      <label for="image_url">Image URL</label>
+      <input type="text" name="image_url" id="image_url" value="{{ manga.image_url }}" required>
+    
+      <label for="rating">Rating (out of 10)</label>
+      <input type="text" name="rating" id="rating" value="{{ manga.rating }}" required>
+    
+      <label for="genre">Genre</label>
+      <input type="text" name="genre" id="genre" value="{{ manga.genre }}" required>
+    
+      <label for="status">Status</label>
+      <input type="text" name="status" id="status" value="{{ manga.status }}" required>
+    
+      <button type="submit">Save Changes</button>
+    </form>
+    
+  </div>
+</body>
+</html>
