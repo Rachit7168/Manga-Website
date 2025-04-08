@@ -473,14 +473,21 @@
           <a href="{{ url_for('home') }}">Home</a>
           <a href="{{ url_for('about') }}">About</a>
           <a href="{{ url_for('category') }}">Categories</a>
-          <a href="{{ url_for('add_manga') }}">Add Manga</a>
+          {% if current_user.id == 1: %}
+            <a href="{{ url_for('add_manga') }}">Add Manga</a>
+          {% endif %}
         </div>
       </nav>
 
       <div class="auth-buttons">
-        <button class="auth-button" id="login" onclick="location.href='{{ url_for('login') }}'">Login</button>
-        <button class="auth-button" id="signout" onclick="location.href='{{ url_for('signin') }}'">Sign Up</button>
+        {% if current_user.is_authenticated %}
+          <button class="auth-button" id="login" onclick="location.href='{{ url_for('logout') }}'">Log Out</button>
+        {% else %}
+          <button class="auth-button" id="login" onclick="location.href='{{ url_for('login') }}'">Login</button>
+          <button class="auth-button" id="signout" onclick="location.href='{{ url_for('signin') }}'">Sign Up</button>
+        {% endif %}
       </div>
+      
 
       <div class="mobile-menu" id="mobileMenu">
         <ul>
@@ -489,9 +496,14 @@
           <li><a href="{{ url_for('category') }}">Categories</a></li>
         </ul>
         <div class="auth-buttons">
-          <button class="auth-button" id="login" onclick="location.href='{{ url_for('login') }}'">Login</button>
-          <button class="auth-button" id="signout" onclick="location.href='{{ url_for('signin') }}'">Sign Up</button>
+          {% if current_user.is_authenticated %}
+            <button class="auth-button" id="login" onclick="location.href='{{ url_for('logout') }}'">Log Out</button>
+          {% else %}
+            <button class="auth-button" id="login" onclick="location.href='{{ url_for('login') }}'">Login</button>
+            <button class="auth-button" id="signout" onclick="location.href='{{ url_for('signin') }}'">Sign Up</button>
+          {% endif %}
         </div>
+        
       </div>
     </header>
 
@@ -506,24 +518,36 @@
     </div>
 
     <div class="manga-grid">
+      <div class="manga-card">
+        <a href="{{ url_for('demo') }}" style="text-decoration: none; color: inherit; position: absolute; inset: 0; z-index: 1;"></a>
+        <div class="image-container">
+          <img src="https://m.media-amazon.com/images/I/81KuBRfJwxL._AC_UF1000,1000_QL80_.jpg" alt="One Peice">
+          <div class="description">
+            This is a demo manga description. It's a thrilling story with epic battles and heartwarming moments.
+          </div>
+        </div>
+        <h3>One Peice</h3>
+      </div>
       {% for manga in mangas %}
         <div class="manga-card">
           <a href="{{ url_for('view_manga', manga_id=manga.id) }}" style="text-decoration: none; color: inherit; position: absolute; inset: 0; z-index: 1;"></a>
           <div class="image-container">
-            <img src="{{ manga.image_url }}" alt="{{ manga.title }}">
+            <img src="{{ manga.image_url }}" alt="{{ manga.title }} cover">
             <div class="description">
               {{ manga.description }}
             </div>
           </div>
           <h3>{{ manga.title }}</h3>
-          <div style="display: flex; justify-content: center; z-index: 2; position: relative;">
-            <form action="{{ url_for('edit_manga', manga_id=manga.id) }}" method="GET">
-              <button type="submit" class="edit-button">Edit</button>
-            </form>
-            <form action="{{ url_for('delete_manga', manga_id=manga.id) }}" method="POST" style="margin-left: 8px;">
-              <button type="submit" class="delete-button">Delete</button>
-            </form>
-          </div>
+          {% if current_user.id == 1 %}
+            <div style="display: flex; justify-content: center; z-index: 2; position: relative;">
+              <form action="{{ url_for('edit_manga', manga_id=manga.id) }}" method="GET">
+                <button type="submit" class="edit-button">Edit</button>
+              </form>
+              <form action="{{ url_for('delete_manga', manga_id=manga.id) }}" method="POST" style="margin-left: 8px;">
+                <button type="submit" class="delete-button">Delete</button>
+              </form>
+            </div>
+          {% endif %}
         </div>
       {% endfor %}
     </div>

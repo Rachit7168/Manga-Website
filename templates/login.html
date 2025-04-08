@@ -190,7 +190,7 @@
   <div class="main-content">
     <div class="login-box">
       <h2>Login to Draco</h2>
-      <form method="POST" action="/login">
+      <form method="POST" action="{{ url_for('login') }}">
         <input type="email" name="email" placeholder="Email" required>
         <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Login</button>

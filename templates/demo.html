@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>One Piece | Draco</title>
+  <style>
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: #eee;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: #ff5e57;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 30px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .logo {
+      color: #57c0ff;
+      font-size: 2rem;
+      text-shadow: 0 0 10px #57c0ff;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      font-size: 1rem;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      height: 2px;
+      width: 0;
+      background: #ff5e57;
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* Main Layout */
+    main {
+      flex: 1;
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    /* Manga Header */
+    .manga-header {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .manga-header img {
+      width: 250px;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .manga-meta-container {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .toggle-meta {
+      width: 100%;
+      background-color: #57c0ff;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(87, 192, 255, 0.6);
+    }
+
+    .toggle-meta:hover {
+      background-color: #ff5e57;
+      box-shadow: 0 0 12px rgba(255, 94, 87, 0.7);
+    }
+
+    .manga-meta {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      padding: 15px;
+      margin-top: 10px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 10px;
+    }
+
+    .manga-meta div {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .manga-meta .label {
+      width: 80px;
+      font-weight: bold;
+      color: #ff5e57;
+      flex-shrink: 0;
+    }
+
+    /* Description Section */
+    .description {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 20px;
+      border-radius: 10px;
+      line-height: 1.6;
+    }
+
+    /* Read Button */
+    .read-button {
+      align-self: center;
+      background-color: #ff5e57;
+      padding: 12px 30px;
+      font-size: 1rem;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 12px rgba(255, 94, 87, 0.5);
+    }
+
+    .read-button:hover {
+      background-color: #57c0ff;
+      box-shadow: 0 0 12px rgba(87, 192, 255, 0.5);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9rem;
+      background-color: rgba(255, 255, 255, 0.03);
+      color: #aaa;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Responsive */
+    @media (min-width: 768px) {
+      .manga-meta {
+        display: flex !important;
+      }
+
+      .toggle-meta {
+        display: none;
+      }
+
+      .manga-header {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">Draco</div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/login">Login</a>
+      <a href="/signup">Signup</a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Manga Detail Section -->
+    <div class="manga-header">
+      <img src="https://m.media-amazon.com/images/I/81KuBRfJwxL._AC_UF1000,1000_QL80_.jpg" alt="One Piece Cover">
+      <div class="manga-meta-container">
+        <button class="toggle-meta">Manga Info ⯆</button>
+        <div class="manga-meta">
+          <div><span class="label">Author:</span><span>Eiichiro Oda</span></div>
+          <div><span class="label">Genre:</span><span>Action, Adventure, Fantasy</span></div>
+          <div><span class="label">Status:</span><span>Running</span></div>
+          <div><span class="label">Rating:</span><span>⭐ 9.8 / 10</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="description">
+      <h2>About One Piece</h2>
+      <p>One Piece follows Monkey D. Luffy, a boy whose body gained the properties of rubber after unintentionally eating a Devil Fruit. With his pirate crew, the Straw Hat Pirates, Luffy explores the Grand Line in search of the world's ultimate treasure known as the "One Piece" in order to become the next Pirate King. Filled with epic battles, heartfelt friendships, and mysterious lore, One Piece is one of the most iconic manga of all time.</p>
+    </div>
+
+    <!-- Read Chapter Button -->
+    <button class="read-button">Read Chapter 1</button>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    © 2025 Draco Manga World. All rights reserved.
+  </footer>
+
+  <!-- JS for toggle -->
+  <script>
+    const toggleBtn = document.querySelector(".toggle-meta");
+    const metaSection = document.querySelector(".manga-meta");
+
+    toggleBtn.addEventListener("click", () => {
+      const isVisible = metaSection.style.display === "flex";
+      metaSection.style.display = isVisible ? "none" : "flex";
+    });
+  </script>
+
+</body>
+</html>
