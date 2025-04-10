@@ -5,13 +5,14 @@ from werkzeug.security import generate_password_hash , check_password_hash
 from flask_login import login_user, LoginManager, current_user, logout_user , login_required
 from functools import wraps
 
+
 # Creating Flask application instance
 app = Flask(__name__)
-app.secret_key = 'rachit7168'
 
 # Configuring database URI and disabling modification tracking
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///manga.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.secret_key = '98989898'
+
 
 #Flask Login
 login_manager = LoginManager()
