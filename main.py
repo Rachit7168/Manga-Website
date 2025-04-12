@@ -12,7 +12,7 @@ app = Flask(__name__)
 # Configuring database URI and disabling modification tracking
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///manga.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+app.secret_key = 'rachit1234'  # Replace with your actual secret key
 #Flask Login
 login_manager = LoginManager()
 login_manager.init_app(app)
