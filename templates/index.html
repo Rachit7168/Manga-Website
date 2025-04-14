@@ -497,6 +497,7 @@
         </ul>
         <div class="auth-buttons">
           {% if current_user.is_authenticated %}
+            <li><a href="{{ url_for('add_manga')}}">Add Manga</a></li>
             <button class="auth-button" id="login" onclick="location.href='{{ url_for('logout') }}'">Log Out</button>
           {% else %}
             <button class="auth-button" id="login" onclick="location.href='{{ url_for('login') }}'">Login</button>
