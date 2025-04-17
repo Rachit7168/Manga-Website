@@ -1,5 +1,6 @@
 Flask
 Flask-Login
 Flask-SQLAlchemy
-python-slugify
 Werkzeug
+python-slugify
+gunicorn
