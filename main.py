@@ -3,15 +3,18 @@ import os
 import shutil
 from datetime import datetime
 from functools import wraps
+import re
 
 # Third-Party Imports
 from flask import Flask, render_template, request, redirect, url_for, abort, flash
 from flask_login import login_user, LoginManager, current_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
-from slugify import slugify
 from werkzeug.utils import secure_filename
+from slugify import slugify
+
 # Local Application Imports
 from models import db, Manga, User, Chapter
+
 
 # Flask Application Initialization
 app = Flask(__name__)
@@ -21,69 +24,63 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///manga.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'rachit1234'  # Replace with a strong, unique secret key
 UPLOAD_FOLDER = os.path.join('static', 'chapters')
-ALLOWED_EXTENSIONS = {'pdf'}  # Only allow PDF uploads now
+ALLOWED_EXTENSIONS = {'pdf'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Flask-Login Configuration
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.user_loader(lambda user_id: User.query.get(int(user_id)))
-login_manager.login_view = 'login'  # Optional: Redirect to login page for unauthorized access
+login_manager.login_view = 'login'
 
 # Database Initialization
 db.init_app(app)
 
-
 # Helper Functions
+def sanitize_filename(name):
+    return re.sub(r'[\\/*?:"<>|]', "", name).strip()
+
 def allowed_file(filename):
-    """Checks if the uploaded file has an allowed extension."""
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def delete_chapter_directory(manga_title, chapter_title):
-    """Deletes the directory containing chapter files."""
     chapter_dir = os.path.join(app.config['UPLOAD_FOLDER'], manga_title, chapter_title)
     if os.path.exists(chapter_dir) and os.path.isdir(chapter_dir):
         shutil.rmtree(chapter_dir)
 
 # Custom Decorators
 def admin_only(f):
-    """Decorator to restrict access to admin users (assuming user ID 1 is admin)."""
     @wraps(f)
     @login_required
     def decorated_function(*args, **kwargs):
         if current_user.id != 1:
-            abort(403)  # Forbidden
+            abort(403)
         return f(*args, **kwargs)
     return decorated_function
 
-# Routes
 
+# Routes
 @app.route('/')
 def home():
-    """Displays all manga entries on the homepage."""
     mangas = Manga.query.all()
     return render_template('index.html', mangas=mangas, current_user=current_user)
 
 @app.route('/demo')
 def demo():
-    """Placeholder for a demo page."""
     return render_template('demo.html')
 
 @app.route('/category')
 def category():
-    """Placeholder for a category view."""
     return render_template('category.html')
 
 @app.route('/logout')
 def logout():
-    """Logs the current user out."""
     logout_user()
     flash("Logged out successfully.", "success")
     return redirect(url_for('home'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """Handles user login."""
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -101,7 +98,6 @@ def login():
 
 @app.route('/signin', methods=["GET", "POST"])
 def signin():
-    """Handles user signup."""
     if request.method == "POST":
         username = request.form['username']
         email = request.form['email']
@@ -116,7 +112,6 @@ def signin():
 @app.route('/add', methods=['GET', 'POST'])
 @admin_only
 def add_manga():
-    """Handles adding new manga entries."""
     if request.method == 'POST':
         title = request.form['title']
         author = request.form['author']
@@ -134,12 +129,10 @@ def add_manga():
 @app.route('/delete/<int:manga_id>', methods=['POST'])
 @admin_only
 def delete_manga(manga_id):
-    """Deletes a manga entry and its associated chapters and pages."""
     manga = Manga.query.get_or_404(manga_id)
     chapters_to_delete = Chapter.query.filter_by(manga_id=manga_id).all()
     for chapter in chapters_to_delete:
         delete_chapter_directory(manga.title, chapter.title)
-        # We are no longer deleting pages as we won't create them
         db.session.delete(chapter)
     db.session.delete(manga)
     db.session.commit()
@@ -148,7 +141,6 @@ def delete_manga(manga_id):
 @app.route('/edit/<int:manga_id>', methods=['GET', 'POST'])
 @admin_only
 def edit_manga(manga_id):
-    """Handles editing existing manga entries."""
     manga = Manga.query.get_or_404(manga_id)
     if request.method == 'POST':
         manga.title = request.form['title']
@@ -164,7 +156,6 @@ def edit_manga(manga_id):
 
 @app.route('/manga/<int:manga_id>')
 def view_manga(manga_id):
-    """Displays the details of a specific manga and its chapters."""
     manga = Manga.query.get_or_404(manga_id)
     chapters = Chapter.query.filter_by(manga_id=manga_id).order_by(Chapter.chapter_number).all()
     return render_template('m_detail.html', manga=manga, chapters=chapters, current_user=current_user)
@@ -173,25 +164,19 @@ def view_manga(manga_id):
 def read_chapter(manga_id, chapter_slug):
     manga = Manga.query.get_or_404(manga_id)
     chapter = Chapter.query.filter_by(manga_id=manga.id, slug=chapter_slug).first_or_404()
-
     pdf_file_path = None
-
     if chapter.pdf_path:
-        pdf_file_path = url_for('static', filename=os.path.join('chapters', manga.title, chapter.title, chapter.pdf_path))
-        print(f"Generated PDF Path: {pdf_file_path}")  # Debugging
-
+        pdf_file_path = url_for('static', filename=f"chapters/{manga.title}/{chapter.title}/{chapter.pdf_path}")
     return render_template('read.html', manga=manga, chapter=chapter, pdf_path=pdf_file_path, current_user=current_user)
-
 
 @app.route('/admin/manga/<int:manga_id>/upload_chapter', methods=['GET', 'POST'])
 @admin_only
 def upload_chapter(manga_id):
-    """Handles uploading new chapters (accepts PDF files)."""
     manga = Manga.query.get_or_404(manga_id)
     if request.method == 'POST':
         chapter_title = request.form.get('title')
         chapter_number = request.form.get('chapter_number')
-        pdf_file = request.files.get('pdf_file')  # Changed 'pages' to 'pdf_file'
+        pdf_file = request.files.get('pdf_file')
 
         if not chapter_title or not pdf_file:
             flash("Please provide a chapter title and a PDF file.", "danger")
@@ -219,7 +204,7 @@ def upload_chapter(manga_id):
         pdf_path_on_server = os.path.join(chapter_dir, pdf_filename)
         try:
             pdf_file.save(pdf_path_on_server)
-            chapter.pdf_path = pdf_filename  # Store only the filename in the database
+            chapter.pdf_path = pdf_filename
             db.session.commit()
             flash(f"Chapter '{chapter_title}' uploaded successfully.", "success")
             return redirect(url_for('view_manga', manga_id=manga.id))
@@ -230,12 +215,11 @@ def upload_chapter(manga_id):
             delete_chapter_directory(manga.title, chapter_title)
             return redirect(request.url)
 
-    return render_template('upload.html', manga=manga, current_user=current_user) # Changed template name
+    return render_template('upload.html', manga=manga, current_user=current_user)
 
 @app.route('/admin/manga/<int:manga_id>/chapter/<int:chapter_id>/delete', methods=['POST'])
 @admin_only
 def delete_chapter(manga_id, chapter_id):
-    """Deletes a specific chapter and its associated PDF."""
     manga = Manga.query.get_or_404(manga_id)
     chapter = Chapter.query.get_or_404(chapter_id)
     if chapter.manga_id != manga.id:
@@ -248,7 +232,6 @@ def delete_chapter(manga_id, chapter_id):
 
 @app.route("/about")
 def about():
-    """Displays the about page."""
     return render_template("about.html", current_user=current_user)
 
 # Run the App
