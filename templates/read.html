@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Read Chapter | Draco</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px 30px;
+            margin-top: 60px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1.5s ease;
+        }
+
+        h1 {
+            text-align: center;
+            color: #57c0ff;
+            text-shadow: 0 0 10px #57c0ff;
+            margin-bottom: 30px;
+        }
+
+        .chapter-details {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .chapter-details p {
+            font-size: 1.1rem;
+            color: #ccc;
+        }
+
+        .chapter-view {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .pdf-viewer {
+            width: 100%;
+            height: 700px; /* Adjust as needed */
+            border: none;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background-color: #57c0ff;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            text-align: center;
+            background-color: transparent;
+            border: 2px solid #57c0ff;
+            color: #57c0ff;
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #57c0ff;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Read Chapter: {{ chapter.title if chapter.title else 'Chapter ' + chapter.chapter_number|string }}</h1>
+
+        <div class="chapter-details">
+            {% if chapter.title %}
+                <p><strong>Chapter Title:</strong> {{ chapter.title }}</p>
+            {% endif %}
+        </div>
+
+        <div class="chapter-view">
+            {% if pdf_path %}
+                <embed class="pdf-viewer" src="{{ pdf_path }}#zoom=page-width&embedded=true&toolbar=1&navpanes=1" type="application/pdf">
+                <br><br>
+                <a href="{{ pdf_path }}" class="btn btn-primary" download>Download Chapter</a>
+            {% else %}
+                <p>No PDF available for this chapter.</p>
+            {% endif %}
+        </div>
+
+        <a href="{{ url_for('view_manga', manga_id=manga.id) }}" class="back-button">← Back to {{ manga.title }}</a>
+    </div>
+
+</body>
+</html>

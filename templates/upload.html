@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Upload Chapter | Draco</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload-box {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            margin-top: 50px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #eee;
+            font-size: 0.9rem;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="file"],
+        button {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 10px;
+            border: none;
+            color: #fff;
+            box-sizing: border-box; /* Ensure padding doesn't increase width */
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        input[type="file"] {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding-top: 10px;
+            padding-bottom: 15px;
+        }
+
+        button {
+            background-color: #57c0ff;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(87, 192, 255, 0.6);
+        }
+
+        button:hover {
+            background-color: #ff5e57;
+            box-shadow: 0 0 12px rgba(255, 94, 87, 0.7);
+        }
+
+        h2 {
+            text-align: center;
+            color: #57c0ff;
+            margin-bottom: 20px;
+        }
+
+        .error {
+            color: #ff5e57;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .back-link {
+            margin-top: 20px;
+            color: #57c0ff;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .flash-messages {
+            margin-top: 20px;
+        }
+
+        .flash-messages p {
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+
+        .flash-messages p.success {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .flash-messages p.danger {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .flash-messages p.warning {
+            background-color: #ff9800;
+            color: white;
+        }
+
+        .flash-messages p.info {
+            background-color: #2196F3;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-box">
+        <h2>Upload Chapter</h2>
+        <form method="POST" enctype="multipart/form-data">
+            <div>
+                <label for="title">Chapter Title</label>
+                <input type="text" id="title" name="title" placeholder="Optional Title">
+            </div>
+            <div>
+                <label for="chapter_number">Chapter Number</label>
+                <input type="number" id="chapter_number" name="chapter_number" placeholder="Chapter Number" required>
+            </div>
+            <div>
+                <label for="pdf_file">Chapter Pages (PDF)</label>
+                <input type="file" id="pdf_file" name="pdf_file" accept="application/pdf" required>
+                <small style="color: #ccc;">Select the PDF file for the chapter.</small>
+            </div>
+            <button type="submit">Upload Chapter</button>
+        </form>
+        {% if manga %}
+            <a href="{{ url_for('view_manga', manga_id=manga.id) }}" class="back-link">Back to {{ manga.title }}</a>
+        {% endif %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <p class="{{ category }}">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>
