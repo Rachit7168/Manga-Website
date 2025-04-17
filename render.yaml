@@ -1,0 +1,10 @@
+  services:
+  - type: web
+    name: draco-manga
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn main:app
+    envVars:
+      - key: FLASK_ENV
+        value: production
+    staticPublishPath: static
