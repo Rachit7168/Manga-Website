@@ -2,6 +2,6 @@ Flask==2.1.1
 Flask-SQLAlchemy==2.5.1
 Flask-Login==0.6.1
 Werkzeug==2.1.1
-slugify==5.0.0
+python-slugify==6.1.2
 flask-wtf==1.0.0
 gunicorn==20.1.0
