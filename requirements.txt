@@ -1,13 +1,6 @@
 Flask==2.2.5
 Flask-Login==0.6.2
-Flask-SQLAlchemy==3.1.1
-gunicorn==21.2.0
+Flask-SQLAlchemy==2.5.1
 Werkzeug==2.2.3
-Flask==2.3.3
-Flask-Login==0.6.3
-Werkzeug==2.3.7
-Flask-SQLAlchemy==3.1.1
-python-slugify==8.0.1
+python-slugify==6.1.2
 pysqlite3-binary==0.5.2
-Flask-Migrate==4.0.4
-Flask-WTF==1.1.1    
